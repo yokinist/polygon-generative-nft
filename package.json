@@ -38,6 +38,7 @@
     "@commitlint/config-conventional": "^16.0.0",
     "@metamask/providers": "^8.1.1",
     "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
     "@openzeppelin/contracts": "^4.5.0",
     "@tailwindcss/line-clamp": "^0.3.1",

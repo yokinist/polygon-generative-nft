@@ -1,5 +1,8 @@
-require('dotenv').config();
 require('@nomiclabs/hardhat-waffle');
+require('@nomiclabs/hardhat-etherscan');
+require('dotenv').config();
+
+const { STAGING_ALCHEMY_KEY, PRIVATE_KEY, ETHERSCAN_API_KEY } = process.env;
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -20,13 +23,13 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
 module.exports = {
   solidity: '0.8.4',
   defaultNetwork: 'rinkeby',
-  // etherscan: {
-  //   apiKey: process.env.ETHERSCAN_API_KEY,
-  // },
+  etherscan: {
+    apiKey: ETHERSCAN_API_KEY,
+  },
   networks: {
     rinkeby: {
-      url: process.env.STAGING_ALCHEMY_KEY,
-      accounts: [process.env.PRIVATE_KEY],
+      url: STAGING_ALCHEMY_KEY,
+      accounts: [PRIVATE_KEY],
     },
   },
   paths: {
