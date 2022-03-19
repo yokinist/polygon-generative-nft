@@ -17,15 +17,6 @@ async function main() {
   // コントラクトアドレスをターミナルに出力
   console.info('Contract deployed to:', contract.address);
 
-  // NFTを 10 点、コントラウト所有者のためにキープする
-  let txn = await contract.reserveNFTs();
-  await txn.wait();
-  console.info('10 NFTs have been reserved');
-
-  // 0.03 ETH を送信して3つ NFT を mint する
-  txn = await contract.mintNFTs(3, { value: hre.ethers.utils.parseEther('0.03') });
-  await txn.wait();
-
   // コントラクト所有者の保有するtokenIdsを取得
   let tokens = await contract.tokensOfOwner(owner.address);
   console.info('Owner has tokens: ', tokens);

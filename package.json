@@ -7,7 +7,7 @@
     "dev:next": "next dev -p 8080",
     "dev:path": "pathpida -p .gitignore -w -o src/libs ",
     "contract:run": "hardhat run src/scripts/run.js",
-    "contract:deploy": "hardhat run src/scripts/deploy.js --network rinkeby",
+    "contract:deploy": "hardhat run src/scripts/deploy.js --network mumbai",
     "build": "pathpida -p .gitignore && next build",
     "start": "next start",
     "lint": "next lint",
