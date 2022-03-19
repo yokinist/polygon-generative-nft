@@ -107,7 +107,7 @@ const Page: React.VFC<Props> = ({}) => {
                           {mining ? 'Mining...🔨' : 'Mint 🔥'}
                         </Button>
                       ) : (
-                        <a href={OPENSEA_URL}>
+                        <a href={OPENSEA_URL} target="_blank" rel="noreferrer">
                           <Button theme="primary">✅ View on OpenSea</Button>
                         </a>
                       )}
