@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { PER_MAX_SUPPLY, PRICE } from '@/constants';
+import { MAX_SUPPLY, OPENSEA_URL, PER_MAX_SUPPLY, PRICE } from '@/constants';
 import { useWallet, useCollectibleContract } from '@/hooks';
 import { Button, Layout } from '@/shared';
 
@@ -11,7 +11,7 @@ type Props = {
 const Page: React.VFC<Props> = ({}) => {
   const { currentAccount, isMumbaiTestnet, connectWallet } = useWallet();
 
-  const { mining, handleMintNFT } = useCollectibleContract({ enable: isMumbaiTestnet });
+  const { mining, minted, lastTokenId, handleMintNFT } = useCollectibleContract({ enable: isMumbaiTestnet });
 
   const [count, setCount] = useState<number>(1);
 
@@ -27,6 +27,10 @@ const Page: React.VFC<Props> = ({}) => {
     if (count === 0) return;
     setCount((prevCount) => prevCount - 1);
   };
+
+  const mintProgressPercentage = useMemo(() => {
+    return Math.floor((lastTokenId / MAX_SUPPLY) * 100);
+  }, [lastTokenId]);
 
   return (
     <>
@@ -61,14 +65,15 @@ const Page: React.VFC<Props> = ({}) => {
                   alt="Scrappy Squirrels"
                   className="rounded-lg"
                 />
-                <div className="ml-6">
-                  <p className="text-color-object-white">Price Per NFT</p>
-                  <h3 className="text-color-object-white">0.03 ETH Each</h3>
+                <div className="ml-6 text-color-object-white">
+                  <p>Price Per NFT</p>
+                  <h3>{PRICE} ETH Each</h3>
+                  <h4> {`${lastTokenId === 0 ? 'x' : lastTokenId} / ${MAX_SUPPLY} minted`}</h4>
                 </div>
               </div>
               <div className="flex items-center justify-between border border-color-border-default rounded-lg p-4 text-color-object-white mb-6">
                 <div>
-                  <p className="text-color-object-light text-large font-bold">10 Max</p>
+                  <p className="text-color-object-light text-large font-bold">{PER_MAX_SUPPLY} Max</p>
                 </div>
                 <div className="flex">
                   <button className="px-4" onClick={handleMinusCount}>
@@ -91,9 +96,22 @@ const Page: React.VFC<Props> = ({}) => {
               <div className="flex">
                 <div className="ml-auto">
                   {currentAccount ? (
-                    <Button theme="primary" onClick={() => handleMintNFT(count)} disabled={mining} inProgress={mining}>
-                      {mining ? 'Mining...🔨' : 'Mint 🔥'}
-                    </Button>
+                    <>
+                      {!minted ? (
+                        <Button
+                          theme="primary"
+                          onClick={() => handleMintNFT(count)}
+                          disabled={mining}
+                          inProgress={mining}
+                        >
+                          {mining ? 'Mining...🔨' : 'Mint 🔥'}
+                        </Button>
+                      ) : (
+                        <a href={OPENSEA_URL}>
+                          <Button theme="primary">✅ View on OpenSea</Button>
+                        </a>
+                      )}
+                    </>
                   ) : (
                     <Button theme="primary" onClick={connectWallet} disabled={mining}>
                       Connect Wallet 👛
@@ -104,6 +122,17 @@ const Page: React.VFC<Props> = ({}) => {
             </div>
           </div>
         </Layout>
+        <div
+          className="mt-12 bg-color-sub-yellow-default flex justify-between px-2 py-3 rounded-md rounded-bl-none rounded-tl-none"
+          style={{ width: `${mintProgressPercentage}%` }}
+        >
+          <div>
+            <span>🏃‍♂️</span>
+          </div>
+          <div>
+            <span className="text-color-object-white font-bold">{`${mintProgressPercentage}%`}</span>
+          </div>
+        </div>
       </div>
     </>
   );

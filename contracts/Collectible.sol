@@ -44,6 +44,11 @@ contract Collectible is ERC721Enumerable, Ownable {
         baseTokenURI = _baseTokenURI;
     }
 
+    function getLastTokenId() public view returns (uint256) {
+        uint256 lastTokenId = _tokenIds.current();
+        return lastTokenId;
+    }
+
     function mintNFTs(uint _count) public payable {
         uint totalMinted = _tokenIds.current();
 

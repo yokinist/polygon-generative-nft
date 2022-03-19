@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { DiscordLogo, ServiceLogo, TwitterLogo, OpenseaLogo } from '../../public/images';
+import { OPENSEA_URL } from '@/constants';
 
 type Props = {
   //
@@ -26,11 +27,7 @@ export const Header: React.VFC<Props> = ({}) => {
             </a>
           </li>
           <li className="w-5 h-5">
-            <a
-              href="https://testnets.opensea.io/collection/nft-collectible-ccgcce1lf3"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href={OPENSEA_URL} target="_blank" rel="noreferrer">
               <img src={OpenseaLogo} alt="OpenSea" />
             </a>
           </li>

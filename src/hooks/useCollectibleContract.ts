@@ -1,10 +1,10 @@
 import { ethers } from 'ethers';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import CollectibleABI from '@/artifacts/contracts/Collectible.sol/Collectible.json';
 import { PRICE } from '@/constants';
 import { getEthereumSafety } from '@/utils';
 
-const CONTRACT_ADDRESS = '0xBe47A9Cc00D01757e108bAF306b70ED8C62D4752';
+const CONTRACT_ADDRESS = '0xa97B71dA6fFb26d0D5A2d49C92Cb5FB305eA1Ea5' as const;
 const CONTRACT_ABI = CollectibleABI.abi;
 
 type Props = {
@@ -13,11 +13,15 @@ type Props = {
 
 type ReturnUseWaveContract = {
   mining: boolean;
+  minted: boolean;
+  lastTokenId: number;
   handleMintNFT: (count: number) => void;
 };
 
 export const useCollectibleContract = ({ enable }: Props): ReturnUseWaveContract => {
+  const [minted, setMinted] = useState<boolean>(false);
   const [mining, setMining] = useState<boolean>(false);
+  const [lastTokenId, setLastTokenId] = useState(0);
   const ethereum = getEthereumSafety();
 
   const collectibleContract = useMemo(() => {
@@ -29,26 +33,41 @@ export const useCollectibleContract = ({ enable }: Props): ReturnUseWaveContract
     return new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
   }, [ethereum]);
 
+  const handleGetLastTokenId = useCallback(async () => {
+    if (!collectibleContract) return;
+    const id = await collectibleContract.getLastTokenId();
+    if (!id) return;
+    setLastTokenId(id.toNumber());
+  }, [collectibleContract]);
+
   const handleMintNFT = useCallback(
     async (count: number) => {
       if (!collectibleContract) return;
       try {
         let nftTxn = await collectibleContract.mintNFTs(count, { value: ethers.utils.parseEther(`${PRICE * count}`) });
         setMining(true);
-        console.info('Mining... please wait');
         await nftTxn.wait();
         console.info(`Mined, see transaction: ${nftTxn.hash}`);
+        handleGetLastTokenId();
+        setMinted(true);
       } catch (err) {
         console.debug(err);
       } finally {
         setMining(false);
       }
     },
-    [collectibleContract],
+    [collectibleContract, handleGetLastTokenId],
   );
+
+  useEffect(() => {
+    if (!enable || !collectibleContract) return;
+    handleGetLastTokenId();
+  }, [enable, collectibleContract, handleGetLastTokenId]);
 
   return {
     mining,
+    minted,
+    lastTokenId,
     handleMintNFT,
   };
 };
