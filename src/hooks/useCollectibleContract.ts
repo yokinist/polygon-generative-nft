@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import CollectibleABI from '@/artifacts/contracts/Collectible.sol/Collectible.json';
 import { PRICE } from '@/constants';
 import { getEthereumSafety } from '@/utils';
@@ -33,8 +33,6 @@ export const useCollectibleContract = ({ enable }: Props): ReturnUseWaveContract
     async (count: number) => {
       if (!collectibleContract) return;
       try {
-        const tmpPrice = (PRICE * count).toString();
-        console.debug(tmpPrice);
         let nftTxn = await collectibleContract.mintNFTs(count, { value: ethers.utils.parseEther(`${PRICE * count}`) });
         setMining(true);
         console.info('Mining... please wait');
@@ -48,11 +46,6 @@ export const useCollectibleContract = ({ enable }: Props): ReturnUseWaveContract
     },
     [collectibleContract],
   );
-
-  useEffect(() => {
-    if (!enable) return;
-    console.debug('ready');
-  }, [enable]);
 
   return {
     mining,

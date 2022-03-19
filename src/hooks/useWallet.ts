@@ -29,7 +29,6 @@ export const useWallet = (): ReturnUseWallet => {
     const accounts = await ethereum.request({ method: 'eth_accounts' });
     const chainId = await ethereum.request({ method: 'eth_chainId' });
     if (typeof chainId === 'string') {
-      console.debug(chainId);
       setCurrentChainId(chainId);
     }
     handleSetAccount(accounts);
