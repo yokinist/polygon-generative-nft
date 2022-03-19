@@ -1,11 +1,11 @@
 import { ethers } from 'ethers';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import CollectibleABI from '@/artifacts/contracts/Collectible.sol/Collectible.json';
+import { PRICE } from '@/constants';
 import { getEthereumSafety } from '@/utils';
 
-const CONTRACT_ADDRESS = '0x9bEf0F5e44B35A08a98A239AF65De1674B05C6B2';
+const CONTRACT_ADDRESS = '0xBe47A9Cc00D01757e108bAF306b70ED8C62D4752';
 const CONTRACT_ABI = CollectibleABI.abi;
-const PRICE = '0.01';
 
 type Props = {
   enable: boolean;
@@ -13,7 +13,7 @@ type Props = {
 
 type ReturnUseWaveContract = {
   mining: boolean;
-  handleMintNFT: () => void;
+  handleMintNFT: (count: number) => void;
 };
 
 export const useCollectibleContract = ({ enable }: Props): ReturnUseWaveContract => {
@@ -29,20 +29,25 @@ export const useCollectibleContract = ({ enable }: Props): ReturnUseWaveContract
     return new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
   }, [ethereum]);
 
-  const handleMintNFT = useCallback(async () => {
-    if (!collectibleContract) return;
-    try {
-      let nftTxn = await collectibleContract.mintNFTs(1, { value: ethers.utils.parseEther(PRICE) });
-      setMining(true);
-      console.info('Mining... please wait');
-      await nftTxn.wait();
-      console.info(`Mined, see transaction: ${nftTxn.hash}`);
-    } catch (err) {
-      console.debug(err);
-    } finally {
-      setMining(false);
-    }
-  }, [collectibleContract]);
+  const handleMintNFT = useCallback(
+    async (count: number) => {
+      if (!collectibleContract) return;
+      try {
+        const tmpPrice = (PRICE * count).toString();
+        console.debug(tmpPrice);
+        let nftTxn = await collectibleContract.mintNFTs(count, { value: ethers.utils.parseEther(`${PRICE * count}`) });
+        setMining(true);
+        console.info('Mining... please wait');
+        await nftTxn.wait();
+        console.info(`Mined, see transaction: ${nftTxn.hash}`);
+      } catch (err) {
+        console.debug(err);
+      } finally {
+        setMining(false);
+      }
+    },
+    [collectibleContract],
+  );
 
   useEffect(() => {
     if (!enable) return;

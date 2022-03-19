@@ -91,8 +91,8 @@ const Page: React.VFC<Props> = ({}) => {
               <div className="flex">
                 <div className="ml-auto">
                   {currentAccount ? (
-                    <Button theme="primary" onClick={handleMintNFT} disabled={mining} inProgress={mining}>
-                      Mint 🔥
+                    <Button theme="primary" onClick={() => handleMintNFT(count)} disabled={mining} inProgress={mining}>
+                      {mining ? 'Mining...🔨' : 'Mint 🔥'}
                     </Button>
                   ) : (
                     <Button theme="primary" onClick={connectWallet} disabled={mining}>
