@@ -19,6 +19,7 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
  */
 module.exports = {
   solidity: '0.8.4',
+  defaultNetwork: 'rinkeby',
   // etherscan: {
   //   apiKey: process.env.ETHERSCAN_API_KEY,
   // },
