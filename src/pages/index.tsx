@@ -16,7 +16,7 @@ const Page: React.VFC<Props> = ({}) => {
   const [count, setCount] = useState<number>(1);
 
   const handleAddCount = () => {
-    if (PER_MAX_SUPPLY === count || count > 29) {
+    if (PER_MAX_SUPPLY === count || count > MAX_SUPPLY - 1) {
       toast.error('それ以上、追加できません');
     } else {
       setCount((prevCount) => prevCount + 1);
