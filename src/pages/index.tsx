@@ -1,4 +1,4 @@
-import { useWallet, useWaveContract } from '@/hooks';
+import { useWallet, useCollectibleContract } from '@/hooks';
 import { Button, Layout } from '@/shared';
 
 type Props = {
@@ -6,9 +6,9 @@ type Props = {
 };
 
 const Page: React.VFC<Props> = ({}) => {
-  const { currentAccount, isRinkebyTestNetwork, connectWallet } = useWallet();
+  const { currentAccount, isMumbaiTestnet, connectWallet } = useWallet();
 
-  const { mining, handleWave, totalWaves } = useWaveContract({ enable: isRinkebyTestNetwork });
+  const { mining, handleMintNFT } = useCollectibleContract({ enable: isMumbaiTestnet });
 
   const renderSomethingBeforeConnectWallet = () => {
     return (
@@ -21,16 +21,18 @@ const Page: React.VFC<Props> = ({}) => {
   const renderSomethingAfterConnectWallet = () => {
     return (
       <div className="flex items-center">
-        {!isRinkebyTestNetwork ? (
-          <p>Please Switch Rinkeby Test Network</p>
+        {!isMumbaiTestnet ? (
+          <p>Please Switch Polygon Test Network</p>
         ) : (
           <>
             <div className="mr-4">
-              <Button theme="primary" onClick={handleWave} disabled={mining}>
-                {mining ? 'mining...' : 'Wave 👋'}
+              <div className="mb-4">
+                <h2>Scrappy Squirrels Tutorial</h2>
+              </div>
+              <Button theme="primary" onClick={handleMintNFT} disabled={mining}>
+                {mining ? 'mining...' : 'Mint 👋'}
               </Button>
             </div>
-            <div>total: {totalWaves} waves</div>
           </>
         )}
       </div>

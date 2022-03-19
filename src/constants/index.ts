@@ -2,6 +2,8 @@ import { pagesPath } from '@/libs/$path';
 
 export const RINKEBY_CHAIN_ID = '0x4' as const;
 
+export const MUMBAI_TESTNET_CHAIN_ID = '0x13881' as const;
+
 export const APP_NAME = 'polygon-generative-nft';
 export const SERVICE_LOGO = 'https://placehold.jp/200x200.png' as const;
 

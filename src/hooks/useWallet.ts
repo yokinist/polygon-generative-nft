@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { RINKEBY_CHAIN_ID } from '@/constants';
+import { MUMBAI_TESTNET_CHAIN_ID } from '@/constants';
 import { getEthereumSafety } from '@/utils';
 
 type ReturnUseWallet = {
-  isRinkebyTestNetwork: boolean;
+  isMumbaiTestnet: boolean;
   currentAccount: string | undefined;
   connectWallet: () => void;
   checkIfWalletIsConnected: () => void;
@@ -12,7 +12,7 @@ type ReturnUseWallet = {
 export const useWallet = (): ReturnUseWallet => {
   const [currentAccount, setCurrentAccount] = useState<string>();
   const [currentChainId, setCurrentChainId] = useState<string>();
-  const [isRinkebyTestNetwork, setRinkebyTestNetwork] = useState<boolean>(false);
+  const [isMumbaiTestnet, setIsMumbaiTestnet] = useState<boolean>(false);
   const ethereum = getEthereumSafety();
 
   const handleSetAccount = useCallback((accounts: unknown) => {
@@ -30,6 +30,7 @@ export const useWallet = (): ReturnUseWallet => {
     const accounts = await ethereum.request({ method: 'eth_accounts' });
     const chainId = await ethereum.request({ method: 'eth_chainId' });
     if (typeof chainId === 'string') {
+      console.debug(chainId);
       setCurrentChainId(chainId);
     }
     handleSetAccount(accounts);
@@ -56,8 +57,8 @@ export const useWallet = (): ReturnUseWallet => {
 
   useEffect(() => {
     if (!currentChainId) return;
-    const isRinkByChainId = currentChainId === RINKEBY_CHAIN_ID;
-    setRinkebyTestNetwork(isRinkByChainId);
+    const currentIsMumbaiTestnet = currentChainId === MUMBAI_TESTNET_CHAIN_ID;
+    setIsMumbaiTestnet(currentIsMumbaiTestnet);
   }, [currentChainId]);
 
   useEffect(() => {
@@ -65,12 +66,14 @@ export const useWallet = (): ReturnUseWallet => {
     checkIfWalletIsConnected();
     ethereum.on('chainChanged', handleChainChanged);
     return () => {
-      ethereum.off('chainChanged', handleChainChanged);
+      if (ethereum?.off) {
+        ethereum.off('chainChanged', handleChainChanged);
+      }
     };
   }, [checkIfWalletIsConnected, ethereum]);
 
   return {
-    isRinkebyTestNetwork,
+    isMumbaiTestnet,
     currentAccount,
     connectWallet,
     checkIfWalletIsConnected,

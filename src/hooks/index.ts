@@ -1,2 +1,2 @@
 export * from './useWallet';
-export * from './useWaveContract';
+export * from './useCollectibleContract';
