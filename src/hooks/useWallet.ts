@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { MUMBAI_TESTNET_CHAIN_ID } from '@/constants';
 import { getEthereumSafety } from '@/utils';
 
@@ -20,8 +21,6 @@ export const useWallet = (): ReturnUseWallet => {
     if (!accounts || accounts.length !== 0) {
       const account = accounts[0];
       setCurrentAccount(account);
-    } else {
-      alert('No authorized account found');
     }
   }, []);
 
@@ -39,7 +38,7 @@ export const useWallet = (): ReturnUseWallet => {
   const connectWallet = async () => {
     try {
       if (!ethereum) {
-        alert('Get MetaMask!');
+        toast('Get MetaMask!', { icon: '🦊' });
         return;
       }
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });

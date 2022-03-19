@@ -7,7 +7,7 @@ type Props = {
 };
 export const Layout: React.VFC<Props> = ({ children, size = 'md', bgColor }) => (
   <div
-    className={classNames({
+    className={classNames('max-w-6xl mx-auto', {
       'px-24 py-6': size === 'sm',
       'px-32 py-8': size === 'md',
       'px-40 py-10': size === 'lg',
