@@ -1,4 +1,4 @@
-# dApp-boilerplate
+# polygon-generative-nft
 
 ## Tech Stack
 
