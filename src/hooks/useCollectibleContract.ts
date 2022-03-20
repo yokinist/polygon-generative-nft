@@ -54,7 +54,6 @@ export const useCollectibleContract = ({ enable }: Props): ReturnUseWaveContract
         await nftTxn.wait();
         console.info(`Mined, see transaction: ${nftTxn.hash}`);
         handleGetLastTokenId();
-        setMinted(true);
       } catch (err) {
         console.debug(err);
       } finally {
