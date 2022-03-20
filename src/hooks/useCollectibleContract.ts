@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 import CollectibleABI from '@/artifacts/contracts/Collectible.sol/Collectible.json';
 import { PRICE } from '@/constants';
 import { getEthereumSafety } from '@/utils';
@@ -43,6 +44,10 @@ export const useCollectibleContract = ({ enable }: Props): ReturnUseWaveContract
   const handleMintNFT = useCallback(
     async (count: number) => {
       if (!collectibleContract) return;
+      if (!enable) {
+        toast.error('Please Switch Polygon Test Network');
+        return;
+      }
       try {
         let nftTxn = await collectibleContract.mintNFTs(count, { value: ethers.utils.parseEther(`${PRICE * count}`) });
         setMining(true);
@@ -56,7 +61,7 @@ export const useCollectibleContract = ({ enable }: Props): ReturnUseWaveContract
         setMining(false);
       }
     },
-    [collectibleContract, handleGetLastTokenId],
+    [collectibleContract, enable, handleGetLastTokenId],
   );
 
   useEffect(() => {
