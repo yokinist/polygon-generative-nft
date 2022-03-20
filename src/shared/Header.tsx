@@ -9,10 +9,10 @@ type Props = {
 export const Header: React.VFC<Props> = ({}) => {
   return (
     <div className="bg-color-background-black">
-      <div className="border-b border-gray-800 px-32 py-4 flex items-center max-w-6xl mx-auto">
+      <div className="border-b border-gray-800 px-8 md:px-32 py-4 flex items-center max-w-6xl mx-auto">
         <Link href="/">
           <a>
-            <img src={ServiceLogo} className="h-8" alt="service logo" />
+            <img src={ServiceLogo} className="h-8 object-cover" alt="service logo" />
           </a>
         </Link>
         <ul className="ml-auto flex">
